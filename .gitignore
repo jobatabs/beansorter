@@ -1,3 +1,6 @@
+# beansorter does not (yet) support continous deployment with GitHub Actions
+fly.toml
+
 # Created by https://www.toptal.com/developers/gitignore/api/python,flask,git,macos,windows,linux
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,flask,git,macos,windows,linux
 

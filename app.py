@@ -36,6 +36,7 @@ def login():
     else:
         hash_value = user.password
         if check_password_hash(hash_value, password):
+            session["username"] = username
             return redirect("/")
         else:
             return redirect("/incorrect")

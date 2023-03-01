@@ -28,7 +28,7 @@ def newuser():
 def login():
     username = request.form["username"]
     password = request.form["password"]
-    sql = "SELECT id, password FROM users WHERE username=:username"
+    sql = text("SELECT id, password FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     if not user:
@@ -46,12 +46,12 @@ def login():
 def register():
     username = request.form["username"]
     password = request.form["password"]
-    sql = "SELECT id, password FROM users WHERE username=:username"
+    sql = text("SELECT id, password FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     if not user:
         hash_value = generate_password_hash(password)
-        sql = "INSERT INTO users (username, password) VALUES (:username, :password)"
+        sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
         db.session.execute(sql, {"username":username, "password":hash_value})
         db.session.commit()
         session["username"] = username

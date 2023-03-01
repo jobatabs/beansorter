@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>beansorter</title>
+	</head>
+	<body>
+		{% if session.username %}
+		<p>Tervetuloa, {{ session.username }}<br />
+		<a href="/logout">Kirjaudu ulos</a></p>
+		{% else %}
+        <p>Kyseistä käyttäjätunnusta ei löydy. Haluatko <a href="/newuser">luoda tunnuksen?</a></p>
+		<form action="/login" method="POST">
+			<p>Käyttäjätunnus:<br />
+			<input type="text" name="username"></p>
+			<p>Salasana:<br />
+			<input type="password" name="password"></p>
+			<input type="submit" value="Kirjaudu">
+		</form>
+		<p><a href="/newuser">Luo tunnus</a></p>
+		{% endif %}
+	</body>
+</html>

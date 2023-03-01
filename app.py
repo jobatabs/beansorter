@@ -64,3 +64,15 @@ def register():
 def logout():
     del session["username"]
     return redirect("/")
+
+@app.route("/incorrect")
+def incorrect():
+    return render_template("incorrect.html")
+
+@app.route("/exists")
+def exists():
+    return render_template("exists.html")
+
+@app.route("/noexist")
+def noexist():
+    return render_template("noexist.html")

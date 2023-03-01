@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>beansorter</title>
+	</head>
+	<body>
+		{% if session.username %}
+		<p>Olet jo kirjautunut, {{ session.username }}<br />
+		<a href="/logout">Kirjaudu ulos</a><br />
+        <a href="/">Etusivulle</a></p>
+		{% else %}
+        <p>Kyseinen käyttäjätunnus on jo varattu. Valitse toinen käyttäjätunnus.</p>
+		<form action="/register" method="POST">
+			<p>Käyttäjätunnus:<br />
+			<input type="text" name="username"></p>
+			<p>Salasana:<br />
+			<input type="password" name="password"></p>
+			<input type="submit" value="Rekisteröidy">
+		</form>
+		{% endif %}
+		<p><a href="/">Takaisin etusivulle</a></p>
+	</body>
+</html>

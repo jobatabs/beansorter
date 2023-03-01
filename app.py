@@ -20,9 +20,22 @@ db = SQLAlchemy(app)
 def index():
     return render_template("index.html")
 
+@app.route("/new")
+def new():
+    return render_template("new.html")
+
 @app.route("/newuser")
 def newuser():
     return render_template("newuser.html")
+
+@app.route("/send", methods=["POST"])
+def send():
+    name = request.form["name"]
+    description = request.form["description"]
+    sql = text("INSERT INTO cafes (name, description) VALUES (:name, :description)")
+    db.session.execute(sql, {"name":name, "description":description})
+    db.session.commit()
+    return redirect("/")
 
 @app.route("/login",methods=["POST"])
 def login():

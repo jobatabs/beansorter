@@ -18,7 +18,9 @@ db = SQLAlchemy(app)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    result = db.session.execute(text("SELECT name, description FROM cafes"))
+    cafes = result.fetchall()
+    return render_template("index.html", cafes=cafes)
 
 @app.route("/new")
 def new():

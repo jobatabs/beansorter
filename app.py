@@ -18,13 +18,20 @@ db = SQLAlchemy(app)
 
 @app.route("/")
 def index():
-    result = db.session.execute(text("SELECT name, description FROM cafes"))
+    result = db.session.execute(text("SELECT id, name, description FROM cafes"))
     cafes = result.fetchall()
     return render_template("index.html", cafes=cafes)
 
 @app.route("/new")
 def new():
     return render_template("new.html")
+
+@app.route("/cafe")
+def cafe():
+    id = request.args.get("id")
+    result = db.session.execute(text(f"SELECT name, description FROM cafes WHERE id={id}"))
+    cafe = result.fetchall()
+    return render_template("cafe.html", cafe=cafe)
 
 @app.route("/newuser")
 def newuser():

@@ -29,8 +29,8 @@
 		<hr>
 		<p><a href="/new">Lisää kahvila</a></p>
 		<hr>
-		{% for name, description in cafes %}
-			{{ name }}
+		{% for id, name, description in cafes %}
+			<a href="/cafe?id={{ id }}">{{ name }}</a>
 			<br />
 			{% for line in description.split('\r\n') %}
 			{{ line }}<br />

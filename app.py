@@ -76,8 +76,6 @@ def login():
             return redirect("/")
         else:
             return redirect("/incorrect")
-    session["username"] = username
-    return redirect("/")
 
 @app.route("/register", methods=["POST"])
 def register():

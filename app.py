@@ -76,25 +76,28 @@ def login():
         return redirect("/")
     return render_template("error.html", error="Incorrect password!")
 
-@app.route("/register", methods=["POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    username = request.form["username"]
-    password = request.form["password"]
-    sql = text("SELECT id, password FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username":username})
-    user = result.fetchone()
-    if not user:
-        hash_value = generate_password_hash(password)
-        sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
-        db.session.execute(sql, {"username":username, "password":hash_value})
-        db.session.commit()
-        session["username"] = username
-        sql = text("SELECT id FROM users WHERE username=:username")
+    if request.method == "GET":
+        return render_template("register.html")
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        sql = text("SELECT id, password FROM users WHERE username=:username")
         result = db.session.execute(sql, {"username":username})
         user = result.fetchone()
-        session["user_id"] = user.id
-        return redirect("/")
-    return render_template("error.html", error="Username has already been taken. Please choose another one.")
+        if not user:
+            hash_value = generate_password_hash(password)
+            sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
+            db.session.execute(sql, {"username":username, "password":hash_value})
+            db.session.commit()
+            session["username"] = username
+            sql = text("SELECT id FROM users WHERE username=:username")
+            result = db.session.execute(sql, {"username":username})
+            user = result.fetchone()
+            session["user_id"] = user.id
+            return redirect("/")
+        return render_template("error.html", error="Username has already been taken. Please choose another one.")
 
 @app.route("/logout")
 def logout():

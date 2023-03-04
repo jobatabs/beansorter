@@ -1,32 +1,5 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<title>beansorter</title>
-		<link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
-		<link rel="manifest" href="/static/site.webmanifest">
-		<link rel="mask-icon" href="/static/safari-pinned-tab.svg" color="#5bbad5">
-		<link rel="shortcut icon" href="/static/favicon.ico">
-		<meta name="msapplication-TileColor" content="#b91d47">
-		<meta name="msapplication-config" content="/static/browserconfig.xml">
-		<meta name="theme-color" content="#afafaf">
-	</head>
-	<body>
-		{% if session.username %}
-		<p>Tervetuloa, {{ session.username }}<br />
-		<a href="/logout">Kirjaudu ulos</a></p>
-		{% else %}
-		<form action="/login" method="POST">
-			<p>Käyttäjätunnus:<br />
-			<input type="text" name="username"></p>
-			<p>Salasana:<br />
-			<input type="password" name="password"></p>
-			<input type="submit" value="Kirjaudu">
-		</form>
-		<p><a href="/newuser">Luo tunnus</a></p>
-		{% endif %}
-		<hr>
+{% extends "layout.html" %}
+{% block content %}
 		<p><a href="/newcafe">Lisää kahvila</a></p>
 		<hr>
 		{% for id, name, description in cafes %}
@@ -37,5 +10,4 @@
 			{% endfor %}
 			<hr>
 		{% endfor %}
-	</body>
-</html>
+{% endblock %}

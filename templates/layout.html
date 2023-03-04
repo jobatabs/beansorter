@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>beansorter: {% block title %}{% endblock %}</title>
+
+        <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/static/favicon-16x16.png">
+		<link rel="manifest" href="/static/site.webmanifest">
+		<link rel="mask-icon" href="/static/safari-pinned-tab.svg" color="#5bbad5">
+		<link rel="shortcut icon" href="/static/favicon.ico">
+
+		<meta name="msapplication-TileColor" content="#b91d47">
+		<meta name="msapplication-config" content="/static/browserconfig.xml">
+		<meta name="theme-color" content="#afafaf">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    </head>
+    <body>
+        <h1><a href="/">beansorter</a></p></h1>
+		{% if session.username %}
+		<p>Tervetuloa, {{ session.username }}<br />
+		<a href="/logout">Kirjaudu ulos</a></p>
+		{% else %}
+		<form action="/login" method="POST">
+			<p>Käyttäjätunnus:<br />
+			<input type="text" name="username"></p>
+			<p>Salasana:<br />
+			<input type="password" name="password"></p>
+			<input type="submit" value="Kirjaudu">
+		</form>
+		<p><a href="/newuser">Luo tunnus</a></p>
+		{% endif %}
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>

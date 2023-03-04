@@ -31,9 +31,9 @@ def cafe():
     cafe_id = request.args.get("id")
     result = db.session.execute(text(f"SELECT name, description FROM cafes WHERE id={cafe_id}"))
     cafe_listing = result.fetchall()
-    result = db.session.execute(text(f"SELECT author, review FROM reviews WHERE cafe_id={cafe_id}"))
+    result = db.session.execute(text(f"SELECT users.username, reviews.review FROM reviews, users WHERE cafe_id={cafe_id} AND reviews.author = users.id"))
     reviews = result.fetchall()
-    return render_template("cafe.html", cafe=cafe_listing, reviews=reviews)
+    return render_template("cafe.html", cafe=cafe_listing, reviews=reviews, id=cafe_id)
 
 @app.route("/newuser")
 def newuser():

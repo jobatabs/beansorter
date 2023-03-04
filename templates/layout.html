@@ -20,17 +20,17 @@
     <body>
         <h1><a href="/">beansorter</a></p></h1>
 		{% if session.username %}
-		<p>Tervetuloa, {{ session.username }}<br />
-		<a href="/logout">Kirjaudu ulos</a></p>
+		<p>Hello, {{ session.username }}<br />
+		<a href="/logout">Sign out</a></p>
 		{% else %}
 		<form action="/login" method="POST">
-			<p>Käyttäjätunnus:<br />
+			<p>Username:<br />
 			<input type="text" name="username"></p>
-			<p>Salasana:<br />
+			<p>Password:<br />
 			<input type="password" name="password"></p>
-			<input type="submit" value="Kirjaudu">
+			<input type="submit" value="Sign in">
 		</form>
-		<p><a href="/register">Luo tunnus</a></p>
+		<p><a href="/register">Sign up</a></p>
 		{% endif %}
         <hr>
         {% block content %}{% endblock %}

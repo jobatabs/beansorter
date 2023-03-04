@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}front page{% endblock %}
 {% block content %}
-		<p><a href="/newcafe">Lisää kahvila</a></p>
+		<p><a href="/newcafe">Add new café</a></p>
 		<hr>
 		{% for id, name, description in cafes %}
 			<h2><a href="/cafe?id={{ id }}">{{ name }}</a></h2>

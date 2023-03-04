@@ -1,17 +1,16 @@
 {% extends "layout.html" %}
-{% block title %}Register{% endblock %}
+{% block title %}register{% endblock %}
 {% block content %}
 		{% if session.username %}
-		<p>Olet jo kirjautunut, {{ session.username }}<br />
-		<a href="/logout">Kirjaudu ulos</a><br />
-        <a href="/">Etusivulle</a></p>
+		<p>You are already logged in, {{ session.username }}<br />
+		<a href="/logout">Log out</a><br />
 		{% else %}
 		<form action="/register" method="POST">
-			<p>Käyttäjätunnus:<br />
+			<p>Username:<br />
 			<input type="text" name="username"></p>
-			<p>Salasana:<br />
+			<p>Password:<br />
 			<input type="password" name="password"></p>
-			<input type="submit" value="Rekisteröidy">
+			<input type="submit" value="Sign up">
 		</form>
 		{% endif %}
 {% endblock %}

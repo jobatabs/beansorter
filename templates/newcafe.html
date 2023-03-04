@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
-{% block title %}Add new cafe{% endblock %}
+{% block title %}add new cafe{% endblock %}
 {% block content %}
         {% if session.username %}
         <form action="/send" method="POST">
-            <p>Nimi<br />
+            <p>Name<br />
             <input type="text" name="name"></p>
-            <p>Kuvaus: <br>
+            <p>Description: <br>
             <textarea name="description" rows="3" cols="40"></textarea></p>
             <br>
-            <input type="submit" value="Lähetä">
+            <input type="submit" value="Submit">
         </form>
         {% else %}
-        <p>Pahoittelut, sinun tulee olla kirjautunut käyttääksesi tätä toimintoa.</p>
+        <p>You must be signed in to access this page.</p>
         {% endif %}
 {% endblock %}

@@ -36,10 +36,6 @@ def cafe():
     reviews = result.fetchall()
     return render_template("cafe.html", cafe=cafe_listing, reviews=reviews, id=cafe_id)
 
-@app.route("/newuser")
-def newuser():
-    return render_template("newuser.html")
-
 @app.route("/send", methods=["POST"])
 def send():
     name = request.form["name"]
@@ -60,21 +56,24 @@ def sendreview():
     db.session.commit()
     return redirect(f"/cafe?id={cafe_id}")
 
-@app.route("/login", methods=["POST"])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    username = request.form["username"]
-    password = request.form["password"]
-    sql = text("SELECT id, password FROM users WHERE username=:username")
-    result = db.session.execute(sql, {"username":username})
-    user = result.fetchone()
-    if not user:
-        return render_template("error.html", error="User not found.")
-    hash_value = user.password
-    if check_password_hash(hash_value, password):
-        session["username"] = username
-        session["user_id"] = user.id
-        return redirect("/")
-    return render_template("error.html", error="Incorrect password!")
+    if request.method == "GET":
+        return render_template("error.html")
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+        sql = text("SELECT id, password FROM users WHERE username=:username")
+        result = db.session.execute(sql, {"username":username})
+        user = result.fetchone()
+        if not user:
+            return render_template("error.html", error="User not found.")
+        hash_value = user.password
+        if check_password_hash(hash_value, password):
+            session["username"] = username
+            session["user_id"] = user.id
+            return redirect("/")
+        return render_template("error.html", error="Incorrect password!")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():

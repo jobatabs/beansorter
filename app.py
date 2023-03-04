@@ -68,13 +68,13 @@ def login():
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     if not user:
-        return redirect("/noexist")
+        return render_template("error.html", error="User not found.")
     hash_value = user.password
     if check_password_hash(hash_value, password):
         session["username"] = username
         session["user_id"] = user.id
         return redirect("/")
-    return redirect("/incorrect")
+    return render_template("error.html", error="Incorrect password!")
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -94,21 +94,10 @@ def register():
         user = result.fetchone()
         session["user_id"] = user.id
         return redirect("/")
-    return redirect("/exists")
+    return render_template("error.html", error="Username has already been taken. Please choose another one.")
 
 @app.route("/logout")
 def logout():
     del session["username"]
+    del session["user_id"]
     return redirect("/")
-
-@app.route("/incorrect")
-def incorrect():
-    return render_template("incorrect.html")
-
-@app.route("/exists")
-def exists():
-    return render_template("exists.html")
-
-@app.route("/noexist")
-def noexist():
-    return render_template("noexist.html")

@@ -13,6 +13,7 @@
 		<meta name="theme-color" content="#afafaf">
     </head>
     <body>
+        {% if session.username %}
         <form action="/send" method="POST">
             <p>Nimi<br />
             <input type="text" name="name"></p>
@@ -21,5 +22,9 @@
             <br>
             <input type="submit" value="Lähetä">
         </form>
+        {% else %}
+        <p>Pahoittelut, sinun tulee olla kirjautunut käyttääksesi tätä toimintoa.</p>
+        <p><a href="/">Etusivulle</a></p>
+        {% endif %}
     </body>
 </html>

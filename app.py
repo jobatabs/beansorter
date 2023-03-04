@@ -31,7 +31,8 @@ def cafe():
     cafe_id = request.args.get("id")
     result = db.session.execute(text(f"SELECT name, description FROM cafes WHERE id={cafe_id}"))
     cafe_listing = result.fetchall()
-    result = db.session.execute(text(f"SELECT users.username, reviews.review FROM reviews, users WHERE cafe_id={cafe_id} AND reviews.author = users.id"))
+    result = db.session.execute(text(f"SELECT users.username, reviews.review FROM reviews, users \
+                                     WHERE cafe_id={cafe_id} AND reviews.author = users.id"))
     reviews = result.fetchall()
     return render_template("cafe.html", cafe=cafe_listing, reviews=reviews, id=cafe_id)
 
@@ -68,14 +69,12 @@ def login():
     user = result.fetchone()
     if not user:
         return redirect("/noexist")
-    else:
-        hash_value = user.password
-        if check_password_hash(hash_value, password):
-            session["username"] = username
-            session["user_id"] = user.id
-            return redirect("/")
-        else:
-            return redirect("/incorrect")
+    hash_value = user.password
+    if check_password_hash(hash_value, password):
+        session["username"] = username
+        session["user_id"] = user.id
+        return redirect("/")
+    return redirect("/incorrect")
 
 @app.route("/register", methods=["POST"])
 def register():
@@ -95,8 +94,7 @@ def register():
         user = result.fetchone()
         session["user_id"] = user.id
         return redirect("/")
-    else:
-        return redirect("/exists")
+    return redirect("/exists")
 
 @app.route("/logout")
 def logout():

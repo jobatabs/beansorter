@@ -22,9 +22,9 @@ def index():
     cafes = result.fetchall()
     return render_template("index.html", cafes=cafes)
 
-@app.route("/new")
-def new():
-    return render_template("new.html")
+@app.route("/newcafe")
+def newcafe():
+    return render_template("newcafe.html")
 
 @app.route("/cafe")
 def cafe():

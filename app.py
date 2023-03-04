@@ -48,6 +48,17 @@ def send():
     db.session.commit()
     return redirect("/")
 
+@app.route("/sendreview", methods=["POST"])
+def sendreview():
+    review = request.form["review"]
+    author = request.form["author"]
+    cafe_id = request.form["cafe_id"]
+    sql = text("INSERT INTO reviews (cafe_id, author, review) \
+               VALUES (:cafe_id, :author, :review)")
+    db.session.execute(sql, {"cafe_id":cafe_id, "author":author, "review":review})
+    db.session.commit()
+    return redirect(f"/cafe?id={cafe_id}")
+
 @app.route("/login", methods=["POST"])
 def login():
     username = request.form["username"]

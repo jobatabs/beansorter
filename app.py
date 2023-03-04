@@ -48,7 +48,7 @@ def send():
     db.session.commit()
     return redirect("/")
 
-@app.route("/login",methods=["POST"])
+@app.route("/login", methods=["POST"])
 def login():
     username = request.form["username"]
     password = request.form["password"]
@@ -67,7 +67,7 @@ def login():
     session["username"] = username
     return redirect("/")
 
-@app.route("/register",methods=["POST"])
+@app.route("/register", methods=["POST"])
 def register():
     username = request.form["username"]
     password = request.form["password"]

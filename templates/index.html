@@ -30,7 +30,7 @@
 		<p><a href="/newcafe">Lisää kahvila</a></p>
 		<hr>
 		{% for id, name, description in cafes %}
-			<a href="/cafe?id={{ id }}">{{ name }}</a>
+			<h2><a href="/cafe?id={{ id }}">{{ name }}</a></h2>
 			<br />
 			{% for line in description.split('\r\n') %}
 			{{ line }}<br />

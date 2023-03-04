@@ -99,7 +99,7 @@ def register():
             return redirect("/")
         return render_template("error.html", error="Username has already been taken. Please choose another one.")
 
-@app.route("/logout")
+@app.route("/logout", methods=["POST"])
 def logout():
     del session["username"]
     del session["user_id"]

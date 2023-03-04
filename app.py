@@ -28,10 +28,12 @@ def newcafe():
 
 @app.route("/cafe")
 def cafe():
-    id = request.args.get("id")
-    result = db.session.execute(text(f"SELECT name, description FROM cafes WHERE id={id}"))
-    cafe = result.fetchall()
-    return render_template("cafe.html", cafe=cafe)
+    cafe_id = request.args.get("id")
+    result = db.session.execute(text(f"SELECT name, description FROM cafes WHERE id={cafe_id}"))
+    cafe_listing = result.fetchall()
+    result = db.session.execute(text(f"SELECT author, review FROM reviews WHERE cafe_id={cafe_id}"))
+    reviews = result.fetchall()
+    return render_template("cafe.html", cafe=cafe_listing, reviews=reviews)
 
 @app.route("/newuser")
 def newuser():

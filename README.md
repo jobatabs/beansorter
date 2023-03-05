@@ -16,7 +16,7 @@ I had originally planned to display results on a map, but that was discarded due
 
 ## Get started
 
-An instance is available at [beansorter.fly.io](https://beansorter.fly.io). There is an admin user to test admin features: username ````admin````, password ````tsohalabra````.
+An instance is available at [beansorter.fly.dev](https://beansorter.fly.dev). There is an admin user to test admin features: username ````admin````, password ````tsohalabra````.
 
 You can also launch a beansorter instance locally:
 

@@ -16,8 +16,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/static/style.css">
     </head>
     <body>
+		<div class="page">
         <h1><a href="/">beansorter</a></p></h1>
 		{% if session.username %}
 		<p>Hello, {{ session.username }}<br />
@@ -37,6 +39,9 @@
 		<p><a href="/del">Delete tags, cafés or reviews</a></p>
 		{% endif %}
 		<hr>
-        {% block content %}{% endblock %}
+			<div class="content">
+        		{% block content %}{% endblock %}
+			</div>
+		</div>
     </body>
 </html>

@@ -6,21 +6,18 @@
             <label for="name">Tag ID</label><br />
             <input id="id" type="text" name="id" required> 
             <input type="hidden" name="token" value="{{ session.token }}">
-            <br />
             <input type="submit" value="Submit">
         </form><br />
         <form action="/delcafe" method="POST" onsubmit="return check(this)">
             <label for="name">Café ID</label><br />
             <input id="id" type="text" name="id" required> 
             <input type="hidden" name="token" value="{{ session.token }}">
-            <br />
             <input type="submit" value="Submit">
         </form><br />
         <form action="/delreview" method="POST" onsubmit="return check(this)">
             <label for="name">Review ID</label><br />
             <input id="id" type="text" name="id" required> 
             <input type="hidden" name="token" value="{{ session.token }}">
-            <br />
             <input type="submit" value="Submit">
         </form>
         <script>

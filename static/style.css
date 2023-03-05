@@ -1,0 +1,24 @@
+body {
+    margin: 2vw 10vh;
+}
+
+.main {
+    background-color: white;
+}
+
+.content {
+    background-color: #eecccc;
+    padding: 1em
+}
+
+.misc {
+    color: #838383
+}
+
+.tag {
+    background-color: #838383;
+    border-radius: 15%;
+    border-color:#838383;
+    border-style: solid ;
+    color: black
+}

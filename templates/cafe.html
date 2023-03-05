@@ -6,15 +6,15 @@
 		<p><a href="/search">Search cafés</a></p>
 		<hr>
 		{% for name, description, added, updated, added_by in cafe %}
-        {{ name }}<br />
+        <h2>{{ name }}</h2><br />
         {% for line in description.split('\r\n') %}
 			{{ line }}<br />
-		{% endfor %}
+		{% endfor %}<br /><div class="misc">
 		Added on {{ added.strftime("%Y-%m-%d, %H:%M") }} by {{ added_by }}<br />
 		Last updated on {{ updated.strftime("%Y-%m-%d, %H:%M") }}<br />
-		{% endfor %}
+		{% endfor %}</div>
 		{% for id, tag in tags %}
-		<a href="/tag?id={{ id }}">{{ tag }}</a>
+		<a class="tag" href="/tag?id={{ id }}">{{ tag }}</a>
 		{% endfor %}
         <hr>
 		{% if session.username %}
@@ -42,11 +42,12 @@
 			{% for line in review.split('\r\n') %}
 			{{ line }}<br />
 			{% endfor %}
+			<div class="misc">
             Author: {{ author }}<br />
 			Posted on: {{ added.strftime("%Y-%m-%d, %H:%M") }}<br />
 			{% if session.role == 1 %}
 			ID: {{ id }}
-			{% endif %}
+			{% endif %}</div>
 			<hr>
 		{% endfor %}
 {% endblock %}

@@ -6,11 +6,11 @@
         <p><a href="/search">Search cafés</a></p>
 		<hr>
 		{% for id, name in tag %}
-        {{ name }}<br />
+        <h2>{{ name }}<br /></h2>
 		{% endfor %}
         <hr>
 		{% for id, name, description in cafes %}
-		<a href="/cafe?id={{ id }}">{{ name }}</a>
+		<h3><a href="/cafe?id={{ id }}">{{ name }}</a></h3>
         <p>{{ description }}</p>
         <hr>
 		{% endfor %}

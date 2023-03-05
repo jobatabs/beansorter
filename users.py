@@ -10,7 +10,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from db import db
 
 def login(username: str, password: str):
-    sql = text("SELECT id, password FROM users WHERE username=:username")
+    sql = text("SELECT id, password, role FROM users WHERE username=:username")
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     if not user:
@@ -20,13 +20,14 @@ def login(username: str, password: str):
         session["username"] = username
         session["user_id"] = user.id
         session["token"] = secrets.token_hex(16)
+        session["role"] = user.role
         return 0
     return 2
 
 def register(username: str, password: str):
     hash_value = generate_password_hash(password)
     try:
-        sql = text("INSERT INTO users (username, password) VALUES (:username, :password)")
+        sql = text("INSERT INTO users (username, password, role) VALUES (:username, :password, 0)")
         db.session.execute(sql, {"username":username, "password":hash_value})
         db.session.commit()
     except IntegrityError:
@@ -42,3 +43,10 @@ def logout():
     del session["username"]
     del session["user_id"]
     del session["token"]
+    del session["role"]
+
+def user_id():
+    return session["user_id"]
+
+def is_admin():
+    return True if session["role"] == 1 else False

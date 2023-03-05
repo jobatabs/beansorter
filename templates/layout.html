@@ -32,7 +32,10 @@
 		</form>
 		<p><a href="/register">Sign up</a></p>
 		{% endif %}
-        <hr>
+		{% if session.role == 1 %}
+		<p><a href="/newtag">Add tags</a></p>
+		{% endif %}
+		<hr>
         {% block content %}{% endblock %}
     </body>
 </html>

@@ -1,13 +1,15 @@
 from os import getenv
 
 from flask import Flask
-from flask import render_template, redirect, request, session
+from flask import render_template, redirect, request, session, abort
 
 from flask_sqlalchemy import SQLAlchemy
 
 from sqlalchemy.sql import text
 
 from werkzeug.security import check_password_hash, generate_password_hash
+
+import secrets
 
 app = Flask(__name__)
 app.secret_key = getenv("SECRET_KEY")
@@ -38,6 +40,8 @@ def cafe():
 
 @app.route("/send", methods=["POST"])
 def send():
+    if session["token"] != request.form["token"]:
+        abort(403)
     name = request.form["name"]
     description = request.form["description"]
     sql = text("INSERT INTO cafes (name, description) VALUES (:name, :description)")
@@ -47,6 +51,8 @@ def send():
 
 @app.route("/sendreview", methods=["POST"])
 def sendreview():
+    if session["token"] != request.form["token"]:
+        abort(403)
     review = request.form["review"]
     author = request.form["author"]
     cafe_id = request.form["cafe_id"]
@@ -72,6 +78,7 @@ def login():
         if check_password_hash(hash_value, password):
             session["username"] = username
             session["user_id"] = user.id
+            session["token"] = secrets.token_hex(16)
             return redirect("/")
         return render_template("error.html", error="Incorrect password!")
 
@@ -95,6 +102,7 @@ def register():
             result = db.session.execute(sql, {"username":username})
             user = result.fetchone()
             session["user_id"] = user.id
+            session["token"] = secrets.token_hex(16)
             return redirect("/")
         return render_template("error.html", error="Username has already been taken. Please choose another one.")
 

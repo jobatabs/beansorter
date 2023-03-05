@@ -16,6 +16,7 @@
             <textarea name="review" rows="3" cols="40"></textarea></p>
 			<input type="hidden" name="cafe_id" value="{{ id }}">
 			<input type="hidden" name="author" value="{{ session.user_id }}">
+			<input type="hidden" name="token" value="{{ session.token }}">
             <br>
             <input type="submit" value="Post">
         </form>

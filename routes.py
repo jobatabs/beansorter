@@ -19,6 +19,10 @@ def tags():
     alltags = result.fetchall()
     return render_template("tags.html", alltags=alltags)
 
+@app.route("/newtag")
+def newtag():
+    return render_template("newtag.html")
+
 @app.route("/search", methods=["GET", "POST"])
 def search():
     if request.method == "GET":
@@ -110,6 +114,27 @@ def sendreview():
     db.session.execute(sql, {"cafe_id":cafe_id, "author":author, "review":review})
     db.session.commit()
     return redirect(f"/cafe?id={cafe_id}")
+
+@app.route("/sendtag", methods=["POST"])
+def sendtag():
+    if users.invalid_token(request.form["token"]):
+        abort(403)
+    if users.is_admin():
+        name = request.form["name"]
+        if len(name) > 20:
+            return render_template("error.html", \
+                                error="Tag must be shorter than 20 characters.")
+        if len(name) < 1:
+            return render_template("error.html", \
+                                error="Please enter a tag.")
+        sql = text("INSERT INTO tags (name, visible) \
+                VALUES (:name, TRUE) RETURNING id")
+        result = db.session.execute(sql, {"name":name})
+        db.session.commit()
+        tag_id = result.fetchone()[0]
+        return redirect(f"/tag?id={tag_id}")
+    return render_template("error.html", \
+                                error="You must be an administrator to access this page.")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

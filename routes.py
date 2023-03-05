@@ -19,6 +19,17 @@ def tags():
     alltags = result.fetchall()
     return render_template("tags.html", alltags=alltags)
 
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    if request.method == "GET":
+        return render_template("search.html")
+    if request.method == "POST":
+        query = request.form["text"]
+        sql = text("SELECT id, name, description FROM cafes WHERE LOWER(name) LIKE LOWER(:text) OR LOWER(description) LIKE LOWER(:text)")
+        result = db.session.execute(sql, {"text":"%"+query+"%"})
+        results = result.fetchall()
+        return render_template("results.html", results=results)
+
 @app.route("/newcafe")
 def newcafe():
     result = db.session.execute(text("SELECT id, name FROM tags WHERE visible=TRUE"))

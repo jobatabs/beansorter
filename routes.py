@@ -79,31 +79,7 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        match users.login(username, password):
-            case 0:
-                return redirect("/")
-            case 1:
-                return render_template("error.html", error="User not found.")
-            case 2:
-                return render_template("error.html", error="Incorrect password!")
-            case 3:
-                return render_template("error.html", \
-                                       error="Username has already been taken. \
-                                        Please choose another one.")
-            case 4:
-                return render_template("error.html", error="Sorry, but that username is too long.")
-            case 5:
-                return render_template("error.html", error="Sorry, but that password is too long.")
-            case 6:
-                return render_template("error.html", \
-                                       error="The username must be longer than 1 character")
-            case 7:
-                return render_template("error.html", \
-                                       error="The password must be longer than 6 characters.")
-            case _:
-                return render_template("error.html", \
-                                       error="Unexpected error. Guru meditation time")
-    return render_template("error.html", error="How did we get here?")
+        return users.login(username, password)
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -112,31 +88,7 @@ def register():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        match users.register(username, password):
-            case 0:
-                return redirect("/")
-            case 1:
-                return render_template("error.html", error="User not found.")
-            case 2:
-                return render_template("error.html", error="Incorrect password!")
-            case 3:
-                return render_template("error.html", \
-                                       error="Username has already been taken. \
-                                        Please choose another one.")
-            case 4:
-                return render_template("error.html", error="Sorry, but that username is too long.")
-            case 5:
-                return render_template("error.html", error="Sorry, but that password is too long.")
-            case 6:
-                return render_template("error.html", \
-                                       error="The username must be longer than 1 character")
-            case 7:
-                return render_template("error.html", \
-                                       error="The password must be longer than 6 characters.")
-            case _:
-                return render_template("error.html", \
-                                       error="Unexpected error. Guru meditation time")
-    return render_template("error.html", error="How did we get here?")
+        return users.register(username, password)
 
 @app.route("/logout")
 def logout():

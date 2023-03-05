@@ -1,6 +1,6 @@
 import secrets
 
-from flask import session
+from flask import session, render_template, redirect
 
 from sqlalchemy.sql import text
 from sqlalchemy.exc import IntegrityError
@@ -14,32 +14,36 @@ def login(username: str, password: str):
     result = db.session.execute(sql, {"username":username})
     user = result.fetchone()
     if not user:
-        return 1
+        return render_template("error.html", error="User not found.")
     hash_value = user.password
     if check_password_hash(hash_value, password):
         session["username"] = username
         session["user_id"] = user.id
         session["token"] = secrets.token_hex(16)
         session["role"] = user.role
-        return 0
-    return 2
+        return redirect("/")
+    return render_template("error.html", error="Incorrect password!")
 
 def register(username: str, password: str):
     hash_value = generate_password_hash(password)
     if len(username) > 50:
-        return 4
+        return render_template("error.html", error="Sorry, but that username is too long.")
     if len(password) > 129:
-        return 5
+        return render_template("error.html", error="Sorry, but that password is too long.")
     if len(username) < 2:
-        return 6
+        return render_template("error.html", \
+                                       error="The username must be longer than 1 character")
     if len(password) < 6:
-        return 7
+        return render_template("error.html", \
+                                       error="The password must be longer than 6 characters.")
     try:
         sql = text("INSERT INTO users (username, password, role) VALUES (:username, :password, 0)")
         db.session.execute(sql, {"username":username, "password":hash_value})
         db.session.commit()
     except IntegrityError:
-        return 3
+        return render_template("error.html", \
+                                       error="Username has already been taken. \
+                                        Please choose another one.")
     return login(username, password)
 
 def invalid_token(token):

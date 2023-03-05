@@ -9,7 +9,7 @@ import users
 
 @app.route("/")
 def index():
-    result = db.session.execute(text("SELECT id, name, description FROM cafes"))
+    result = db.session.execute(text("SELECT id, name, description FROM cafes WHERE visible=TRUE"))
     cafes = result.fetchall()
     return render_template("index.html", cafes=cafes)
 
@@ -20,10 +20,10 @@ def newcafe():
 @app.route("/cafe")
 def cafe():
     cafe_id = request.args.get("id")
-    result = db.session.execute(text(f"SELECT name, description FROM cafes WHERE id={cafe_id}"))
+    result = db.session.execute(text(f"SELECT cafes.name, cafes.description, cafes.added, cafes.updated, users.username FROM cafes, users WHERE cafes.id={cafe_id} AND cafes.visible=TRUE AND cafes.added_by = users.id"))
     cafe_listing = result.fetchall()
-    result = db.session.execute(text(f"SELECT users.username, reviews.review FROM reviews, users \
-                                     WHERE cafe_id={cafe_id} AND reviews.author = users.id"))
+    result = db.session.execute(text(f"SELECT users.username, reviews.review, reviews.added FROM reviews, users \
+                                     WHERE cafe_id={cafe_id} AND reviews.author = users.id AND visible=TRUE"))
     reviews = result.fetchall()
     return render_template("cafe.html", cafe=cafe_listing, reviews=reviews, id=cafe_id)
 
@@ -33,7 +33,7 @@ def send():
         abort(403)
     name = request.form["name"]
     description = request.form["description"]
-    sql = text("INSERT INTO cafes (name, description) VALUES (:name, :description)")
+    sql = text("INSERT INTO cafes (name, description, visible, added) VALUES (:name, :description, TRUE, NOW())")
     db.session.execute(sql, {"name":name, "description":description})
     db.session.commit()
     return redirect("/")
@@ -45,8 +45,8 @@ def sendreview():
     review = request.form["review"]
     author = request.form["author"]
     cafe_id = request.form["cafe_id"]
-    sql = text("INSERT INTO reviews (cafe_id, author, review) \
-               VALUES (:cafe_id, :author, :review)")
+    sql = text("INSERT INTO reviews (cafe_id, author, review, visible, added, updated) \
+               VALUES (:cafe_id, :author, :review, TRUE, NOW(), NOW())")
     db.session.execute(sql, {"cafe_id":cafe_id, "author":author, "review":review})
     db.session.commit()
     return redirect(f"/cafe?id={cafe_id}")

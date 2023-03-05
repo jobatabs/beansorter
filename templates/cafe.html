@@ -1,13 +1,15 @@
 {% extends "layout.html" %}
-{% block title %}{% for name, description in cafe %}{{name}}{% endfor %}{% endblock %}
+{% block title %}{% for name, description, added, updated, added_by in cafe %}{{name}}{% endfor %}{% endblock %}
 {% block content %}
 		<p><a href="/newcafe">Add new café</a></p>
 		<hr>
-		{% for name, description in cafe %}
+		{% for name, description, added, updated, added_by in cafe %}
         {{ name }}<br />
         {% for line in description.split('\r\n') %}
 			{{ line }}<br />
 		{% endfor %}
+		Added on {{ added.strftime("%Y-%m-%d, %H:%M") }} by {{ added_by }}<br />
+		Last updated on {{ updated.strftime("%Y-%m-%d, %H:%M") }}<br />
 		{% endfor %}
         <hr>
 		{% if session.username %}
@@ -22,11 +24,12 @@
         </form>
 		<hr>
 		{% endif %}
-		{% for author, review in reviews %}
+		{% for author, review, added in reviews %}
 			{% for line in review.split('\r\n') %}
 			{{ line }}<br />
 			{% endfor %}
             Author: {{ author }}<br />
+			Posted on: {{ added.strftime("%Y-%m-%d, %H:%M") }}<br />
 			<hr>
 		{% endfor %}
 {% endblock %}

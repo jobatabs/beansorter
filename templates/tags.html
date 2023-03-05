@@ -1,0 +1,11 @@
+{% extends "layout.html" %}
+{% block title %}browse{% endblock %}
+{% block content %}
+		<p><a href="/newcafe">Add new café</a></p>
+        <p><a href="/search">Search cafés</a></p>
+		<hr>
+		{% for id, name in alltags %}
+			<h2><a href="/tag?id={{ id }}">{{ name }}</a></h2>
+			<hr>
+		{% endfor %}
+{% endblock %}

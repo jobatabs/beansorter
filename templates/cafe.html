@@ -2,6 +2,7 @@
 {% block title %}{% for name, description, added, updated, added_by in cafe %}{{name}}{% endfor %}{% endblock %}
 {% block content %}
 		<p><a href="/newcafe">Add new café</a></p>
+		<p><a href="/tags">Browse cafés by tag</a></p>
 		<hr>
 		{% for name, description, added, updated, added_by in cafe %}
         {{ name }}<br />
@@ -10,6 +11,9 @@
 		{% endfor %}
 		Added on {{ added.strftime("%Y-%m-%d, %H:%M") }} by {{ added_by }}<br />
 		Last updated on {{ updated.strftime("%Y-%m-%d, %H:%M") }}<br />
+		{% endfor %}
+		{% for id, tag in tags %}
+		<a href="/tag?id={{ id }}">{{ tag }}</a>
 		{% endfor %}
         <hr>
 		{% if session.username %}

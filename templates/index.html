@@ -2,6 +2,7 @@
 {% block title %}front page{% endblock %}
 {% block content %}
 		<p><a href="/newcafe">Add new café</a></p>
+		<p><a href="/tags">Browse cafés by tag</a></p>
 		<hr>
 		{% for id, name, description in cafes %}
 			<h2><a href="/cafe?id={{ id }}">{{ name }}</a></h2>

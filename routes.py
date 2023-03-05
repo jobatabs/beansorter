@@ -13,9 +13,17 @@ def index():
     cafes = result.fetchall()
     return render_template("index.html", cafes=cafes)
 
+@app.route("/tags")
+def tags():
+    result = db.session.execute(text("SELECT id, name FROM tags WHERE visible=TRUE"))
+    alltags = result.fetchall()
+    return render_template("tags.html", alltags=alltags)
+
 @app.route("/newcafe")
 def newcafe():
-    return render_template("newcafe.html")
+    result = db.session.execute(text("SELECT id, name FROM tags WHERE visible=TRUE"))
+    alltags = result.fetchall()
+    return render_template("newcafe.html", alltags=alltags)
 
 @app.route("/cafe")
 def cafe():
@@ -30,7 +38,18 @@ def cafe():
                                      FROM reviews, users WHERE cafe_id={cafe_id} \
                                      AND reviews.author = users.id AND visible=TRUE"))
     reviews = result.fetchall()
-    return render_template("cafe.html", cafe=cafe_listing, reviews=reviews, id=cafe_id)
+    result = db.session.execute(text(f"SELECT tags.id, tags.name FROM tags, tagmap, cafes WHERE tagmap.tag_id = tags.id AND tagmap.cafe_id = cafes.id AND cafes.id = {cafe_id}"))
+    tag_list = result.fetchall()
+    return render_template("cafe.html", cafe=cafe_listing, reviews=reviews, id=cafe_id, tags=tag_list)
+
+@app.route("/tag")
+def tag():
+    tag_id = request.args.get("id")
+    result = db.session.execute(text(f"SELECT tags.id, tags.name FROM tags WHERE tags.id={tag_id} AND tags.visible=TRUE"))
+    tag_listing = result.fetchall()
+    result = db.session.execute(text(f"SELECT cafes.id, cafes.name, cafes.description FROM tags, tagmap, cafes WHERE tagmap.tag_id = tags.id AND tags.id = {tag_id} AND tagmap.cafe_id = cafes.id AND tags.visible = TRUE AND cafes.visible = TRUE"))
+    cafes = result.fetchall()
+    return render_template("tag.html", cafes=cafes, id=tag_id, tag=tag_listing)
 
 @app.route("/send", methods=["POST"])
 def send():
@@ -48,8 +67,13 @@ def send():
         return render_template("error.html", \
                                error="Sorry, please keep your description below 5000 characters.")
     sql = text("INSERT INTO cafes (name, description, visible, added, updated, added_by) \
-               VALUES (:name, :description, TRUE, NOW(), NOW(), :user)")
-    db.session.execute(sql, {"name":name, "description":description, "user":users.user_id})
+               VALUES (:name, :description, TRUE, NOW(), NOW(), :user) RETURNING id")
+    result = db.session.execute(sql, {"name":name, "description":description, "user":users.user_id()})
+    db.session.commit()
+    cafe_id = result.fetchone()[0]
+    for tag_id in request.form.getlist("tags"):
+        sql = text("INSERT INTO tagmap (tag_id, cafe_id) VALUES (:tag_id, :cafe_id)")
+        db.session.execute(sql, {"tag_id":tag_id, "cafe_id":cafe_id})
     db.session.commit()
     return redirect("/")
 

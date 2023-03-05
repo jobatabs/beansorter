@@ -52,7 +52,7 @@ def cafe():
                                      FROM cafes, users WHERE cafes.id={cafe_id} \
                                      AND cafes.visible=TRUE AND cafes.added_by = users.id"))
     cafe_listing = result.fetchall()
-    result = db.session.execute(text(f"SELECT users.username, \
+    result = db.session.execute(text(f"SELECT reviews.id, users.username, \
                                      reviews.review, reviews.added \
                                      FROM reviews, users WHERE cafe_id={cafe_id} \
                                      AND reviews.author = users.id AND visible=TRUE"))
@@ -96,6 +96,10 @@ def send():
     db.session.commit()
     return redirect("/")
 
+@app.route("/del")
+def deletepages():
+    return render_template("del.html")
+
 @app.route("/sendreview", methods=["POST"])
 def sendreview():
     if users.invalid_token(request.form["token"]):
@@ -133,6 +137,54 @@ def sendtag():
         db.session.commit()
         tag_id = result.fetchone()[0]
         return redirect(f"/tag?id={tag_id}")
+    return render_template("error.html", \
+                                error="You must be an administrator to access this page.")
+
+@app.route("/deltag", methods=["POST"])
+def deltag():
+    if users.invalid_token(request.form["token"]):
+        abort(403)
+    if users.is_admin():
+        del_id = request.form["id"]
+        if len(del_id) < 1:
+            return render_template("error.html", \
+                                error="Please enter an ID.")
+        sql = text("UPDATE tags SET visible=FALSE WHERE tags.id=:del_id")
+        db.session.execute(sql, {"del_id":del_id})
+        db.session.commit()
+        return render_template("error.html", error="Delete successful.")
+    return render_template("error.html", \
+                                error="You must be an administrator to access this page.")
+
+@app.route("/delreview", methods=["POST"])
+def delreview():
+    if users.invalid_token(request.form["token"]):
+        abort(403)
+    if users.is_admin():
+        del_id = request.form["id"]
+        if len(del_id) < 1:
+            return render_template("error.html", \
+                                error="Please enter an ID.")
+        sql = text("UPDATE reviews SET visible=FALSE WHERE reviews.id=:del_id")
+        db.session.execute(sql, {"del_id":del_id})
+        db.session.commit()
+        return render_template("error.html", error="Delete successful.")
+    return render_template("error.html", \
+                                error="You must be an administrator to access this page.")
+
+@app.route("/delcafe", methods=["POST"])
+def delcafe():
+    if users.invalid_token(request.form["token"]):
+        abort(403)
+    if users.is_admin():
+        del_id = request.form["id"]
+        if len(del_id) < 1:
+            return render_template("error.html", \
+                                error="Please enter an ID.")
+        sql = text("UPDATE cafes SET visible=FALSE WHERE cafes.id=:del_id")
+        db.session.execute(sql, {"del_id":del_id})
+        db.session.commit()
+        return render_template("error.html", error="Delete successful.")
     return render_template("error.html", \
                                 error="You must be an administrator to access this page.")
 

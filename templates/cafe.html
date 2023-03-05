@@ -38,12 +38,15 @@
 		</script>
 		<hr>
 		{% endif %}
-		{% for author, review, added in reviews %}
+		{% for id, author, review, added in reviews %}
 			{% for line in review.split('\r\n') %}
 			{{ line }}<br />
 			{% endfor %}
             Author: {{ author }}<br />
 			Posted on: {{ added.strftime("%Y-%m-%d, %H:%M") }}<br />
+			{% if session.role == 1 %}
+			ID: {{ id }}
+			{% endif %}
 			<hr>
 		{% endfor %}
 {% endblock %}

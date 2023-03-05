@@ -25,6 +25,10 @@ def search():
         return render_template("search.html")
     if request.method == "POST":
         query = request.form["text"]
+        if len(query) < 1:
+            return render_template("error.html", error="Please enter a search term.")
+        if len(query) > 50:
+            return render_template("error.html", error="Please keep your search term below 50 characters.")
         sql = text("SELECT id, name, description FROM cafes WHERE LOWER(name) LIKE LOWER(:text) OR LOWER(description) LIKE LOWER(:text)")
         result = db.session.execute(sql, {"text":"%"+query+"%"})
         results = result.fetchall()

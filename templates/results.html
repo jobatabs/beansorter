@@ -6,13 +6,17 @@
 		<hr>
         <form action="/search" method="POST" onsubmit="return check(this)">
             <label for="text">Search</label>
-            <input type="text" id="text" name="text"><br />
+            <input type="text" id="text" name="text" required><br />
             <input type="submit" value="Search">
         </form>
         <script>
             function check(form) {
                 if (form.text.value.length > 50) {
                     alert("The search term you provided is too long");
+                    return false;
+                }
+                if (form.text.value.length < 1) {
+                    alert("The search term you provided is too short");
                     return false;
                 }
                 return true;

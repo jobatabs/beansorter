@@ -47,9 +47,9 @@ def send():
     if len(description) > 5000:
         return render_template("error.html", \
                                error="Sorry, please keep your description below 5000 characters.")
-    sql = text("INSERT INTO cafes (name, description, visible, added) \
-               VALUES (:name, :description, TRUE, NOW())")
-    db.session.execute(sql, {"name":name, "description":description})
+    sql = text("INSERT INTO cafes (name, description, visible, added, updated, added_by) \
+               VALUES (:name, :description, TRUE, NOW(), NOW(), :user)")
+    db.session.execute(sql, {"name":name, "description":description, "user":users.user_id})
     db.session.commit()
     return redirect("/")
 
@@ -67,7 +67,7 @@ def sendreview():
         return render_template("error.html", \
                                error="Please write something before posting your review.")
     sql = text("INSERT INTO reviews (cafe_id, author, review, visible, added) \
-               VALUES (:cafe_id, :author, :review, TRUE, NOW(), NOW())")
+               VALUES (:cafe_id, :author, :review, TRUE, NOW())")
     db.session.execute(sql, {"cafe_id":cafe_id, "author":author, "review":review})
     db.session.commit()
     return redirect(f"/cafe?id={cafe_id}")

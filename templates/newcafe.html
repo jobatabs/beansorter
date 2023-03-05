@@ -2,6 +2,7 @@
 {% block title %}add new cafe{% endblock %}
 {% block content %}
         <p><a href="/tags">Browse cafés by tag</a></p>
+        <p><a href="/search">Search cafés</a></p>
         <hr>
         {% if session.username %}
         <form action="/send" method="POST" onsubmit="return check(this)">

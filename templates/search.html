@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+{% block title %}search{% endblock %}
+{% block content %}
+		<p><a href="/newcafe">Add new café</a></p>
+		<p><a href="/tags">Browse cafés by tag</a></p>
+		<hr>
+        <form action="/search" method="POST" onsubmit="return check(this)">
+            <label for="text">Search</label>
+            <input type="text" id="text" name="text"><br />
+            Search tags:
+            {% for id, tag in alltags %}
+            <input type="checkbox" id="{{ id }}" name="tags" value="{{ id }}">
+            <label for="{{ id }}">{{ tag }}</label>
+            {% endfor %}
+            <input type="submit" value="Search">
+        </form>
+        <script>
+            function check(form) {
+                if (form.text.value.length > 50) {
+                    alert("The search term you provided is too long");
+                    return false;
+                }
+                return true;
+            }
+        </script>
+{% endblock %}

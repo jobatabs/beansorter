@@ -19,6 +19,24 @@ def tags():
     alltags = result.fetchall()
     return render_template("tags.html", alltags=alltags)
 
+@app.route("/search", methods=["GET", "POST"])
+def search():
+    result = db.session.execute(text("SELECT id, name FROM tags WHERE visible=TRUE"))
+    alltags = result.fetchall()
+    if request.method == "GET":
+        return render_template("search.html", alltags=alltags)
+    if request.method == "POST":
+        query = request.form["text"]
+        tag_query = request.form.getlist("tags")
+        tag_string = str(tag_query).replace("[", "(").replace("]", ")")
+        if not tag_string:
+            sql = text(f"SELECT cafes.id, cafes.name, cafes.description FROM cafes, tagmap, tags WHERE tagmap.tag_id = tags.id AND (tags.id IN {tag_string}) AND tagmap.cafe_id = cafes.id GROUP BY cafes.id")
+        else:
+            sql = text("SELECT id, name, description FROM cafes WHERE LOWER(name) LIKE LOWER(:text) OR LOWER(description) LIKE LOWER(:text)")
+        result = db.session.execute(sql, {"text":"%"+query+"%"})
+        results = result.fetchall()
+        return render_template("results.html", results=results, alltags=alltags)
+
 @app.route("/newcafe")
 def newcafe():
     result = db.session.execute(text("SELECT id, name FROM tags WHERE visible=TRUE"))

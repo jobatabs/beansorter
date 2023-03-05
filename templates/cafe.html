@@ -13,7 +13,7 @@
 		{% endfor %}
         <hr>
 		{% if session.username %}
-		<form action="/sendreview" method="POST">
+		<form action="/sendreview" method="POST" onsubmit="return check(this)">
             <p>Review: <br>
             <textarea name="review" rows="3" cols="40"></textarea></p>
 			<input type="hidden" name="cafe_id" value="{{ id }}">
@@ -22,6 +22,15 @@
             <br>
             <input type="submit" value="Post">
         </form>
+		<script>
+		function check(form) {
+			if (form.review.value.length > 2000) {
+				alert("Your review is too long, please keep it below 2000 characters");
+				return false;
+			}
+			return true;
+		}
+		</script>
 		<hr>
 		{% endif %}
 		{% for author, review, added in reviews %}

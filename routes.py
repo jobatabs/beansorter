@@ -38,6 +38,15 @@ def send():
         abort(403)
     name = request.form["name"]
     description = request.form["description"]
+    if len(name) < 1:
+        return render_template("error.html", error="Please enter a name for the café.")
+    if len(description) < 1:
+        return render_template("error.html", error="Please enter a description for the café.")
+    if len(name) > 50:
+        return render_template("error.html", error="Sorry, the name you provided is too long.")
+    if len(description) > 5000:
+        return render_template("error.html", \
+                               error="Sorry, please keep your description below 5000 characters.")
     sql = text("INSERT INTO cafes (name, description, visible, added) \
                VALUES (:name, :description, TRUE, NOW())")
     db.session.execute(sql, {"name":name, "description":description})
@@ -51,7 +60,13 @@ def sendreview():
     review = request.form["review"]
     author = request.form["author"]
     cafe_id = request.form["cafe_id"]
-    sql = text("INSERT INTO reviews (cafe_id, author, review, visible, added, updated) \
+    if len(review) > 2000:
+        return render_template("error.html", \
+                               error="Sorry, please keep your review below 2000 characters.")
+    if len(review) < 1:
+        return render_template("error.html", \
+                               error="Please write something before posting your review.")
+    sql = text("INSERT INTO reviews (cafe_id, author, review, visible, added) \
                VALUES (:cafe_id, :author, :review, TRUE, NOW(), NOW())")
     db.session.execute(sql, {"cafe_id":cafe_id, "author":author, "review":review})
     db.session.commit()
@@ -75,6 +90,16 @@ def login():
                 return render_template("error.html", \
                                        error="Username has already been taken. \
                                         Please choose another one.")
+            case 4:
+                return render_template("error.html", error="Sorry, but that username is too long.")
+            case 5:
+                return render_template("error.html", error="Sorry, but that password is too long.")
+            case 6:
+                return render_template("error.html", \
+                                       error="The username must be longer than 1 character")
+            case 7:
+                return render_template("error.html", \
+                                       error="The password must be longer than 6 characters.")
             case _:
                 return render_template("error.html", \
                                        error="Unexpected error. Guru meditation time")
@@ -98,6 +123,14 @@ def register():
                 return render_template("error.html", \
                                        error="Username has already been taken. \
                                         Please choose another one.")
+            case 4:
+                return render_template("error.html", error="Sorry, but that username is too long.")
+            case 5:
+                return render_template("error.html", error="Sorry, but that password is too long.")
+            case 6:
+                return render_template("error.html", error="The username must be longer than 1 character")
+            case 7:
+                return render_template("error.html", error="The password must be longer than 6 characters.")
             case _:
                 return render_template("error.html", \
                                        error="Unexpected error. Guru meditation time")

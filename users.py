@@ -26,6 +26,14 @@ def login(username: str, password: str):
 
 def register(username: str, password: str):
     hash_value = generate_password_hash(password)
+    if len(username) > 50:
+        return 4
+    if len(password) > 129:
+        return 5
+    if len(username) < 2:
+        return 6
+    if len(password) < 6:
+        return 7
     try:
         sql = text("INSERT INTO users (username, password, role) VALUES (:username, :password, 0)")
         db.session.execute(sql, {"username":username, "password":hash_value})

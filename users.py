@@ -49,4 +49,4 @@ def user_id():
     return session["user_id"]
 
 def is_admin():
-    return True if session["role"] == 1 else False
+    return session["role"] == 1

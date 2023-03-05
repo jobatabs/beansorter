@@ -20,10 +20,15 @@ def newcafe():
 @app.route("/cafe")
 def cafe():
     cafe_id = request.args.get("id")
-    result = db.session.execute(text(f"SELECT cafes.name, cafes.description, cafes.added, cafes.updated, users.username FROM cafes, users WHERE cafes.id={cafe_id} AND cafes.visible=TRUE AND cafes.added_by = users.id"))
+    result = db.session.execute(text(f"SELECT cafes.name, cafes.description, \
+                                     cafes.added, cafes.updated, users.username \
+                                     FROM cafes, users WHERE cafes.id={cafe_id} \
+                                     AND cafes.visible=TRUE AND cafes.added_by = users.id"))
     cafe_listing = result.fetchall()
-    result = db.session.execute(text(f"SELECT users.username, reviews.review, reviews.added FROM reviews, users \
-                                     WHERE cafe_id={cafe_id} AND reviews.author = users.id AND visible=TRUE"))
+    result = db.session.execute(text(f"SELECT users.username, \
+                                     reviews.review, reviews.added \
+                                     FROM reviews, users WHERE cafe_id={cafe_id} \
+                                     AND reviews.author = users.id AND visible=TRUE"))
     reviews = result.fetchall()
     return render_template("cafe.html", cafe=cafe_listing, reviews=reviews, id=cafe_id)
 
@@ -33,7 +38,8 @@ def send():
         abort(403)
     name = request.form["name"]
     description = request.form["description"]
-    sql = text("INSERT INTO cafes (name, description, visible, added) VALUES (:name, :description, TRUE, NOW())")
+    sql = text("INSERT INTO cafes (name, description, visible, added) \
+               VALUES (:name, :description, TRUE, NOW())")
     db.session.execute(sql, {"name":name, "description":description})
     db.session.commit()
     return redirect("/")
@@ -66,10 +72,13 @@ def login():
             case 2:
                 return render_template("error.html", error="Incorrect password!")
             case 3:
-                return render_template("error.html", error="Username has already been taken. Please choose another one.")
+                return render_template("error.html", \
+                                       error="Username has already been taken. \
+                                        Please choose another one.")
             case _:
-                return render_template("error.html", error="Unexpected error. Guru meditation time")
-        
+                return render_template("error.html", \
+                                       error="Unexpected error. Guru meditation time")
+    return render_template("error.html", error="How did we get here?")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -86,10 +95,13 @@ def register():
             case 2:
                 return render_template("error.html", error="Incorrect password!")
             case 3:
-                return render_template("error.html", error="Username has already been taken. Please choose another one.")
+                return render_template("error.html", \
+                                       error="Username has already been taken. \
+                                        Please choose another one.")
             case _:
-                return render_template("error.html", error="Unexpected error. Guru meditation time")
-        
+                return render_template("error.html", \
+                                       error="Unexpected error. Guru meditation time")
+    return render_template("error.html", error="How did we get here?")
 
 @app.route("/logout")
 def logout():

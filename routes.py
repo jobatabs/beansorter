@@ -128,9 +128,11 @@ def register():
             case 5:
                 return render_template("error.html", error="Sorry, but that password is too long.")
             case 6:
-                return render_template("error.html", error="The username must be longer than 1 character")
+                return render_template("error.html", \
+                                       error="The username must be longer than 1 character")
             case 7:
-                return render_template("error.html", error="The password must be longer than 6 characters.")
+                return render_template("error.html", \
+                                       error="The password must be longer than 6 characters.")
             case _:
                 return render_template("error.html", \
                                        error="Unexpected error. Guru meditation time")

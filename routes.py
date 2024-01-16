@@ -106,7 +106,12 @@ def sendreview():
         abort(403)
     review = request.form["review"]
     author = request.form["author"]
-    cafe_id = request.form["cafe_id"]
+    try:
+        cafe_id = int(request.form["cafe_id"])
+    except ValueError:
+        # We return a vague error here in case we are being red-teamed.
+        return render_template("error.html", \
+                               error="Sorry, there was an issue with your request.")
     if len(review) > 2000:
         return render_template("error.html", \
                                error="Sorry, please keep your review below 2000 characters.")
@@ -117,7 +122,7 @@ def sendreview():
                VALUES (:cafe_id, :author, :review, TRUE, NOW())")
     db.session.execute(sql, {"cafe_id":cafe_id, "author":author, "review":review})
     db.session.commit()
-    return redirect(f"/cafe?id={cafe_id}")
+    return redirect(f"/cafe?id={int(cafe_id)}")
 
 @app.route("/sendtag", methods=["POST"])
 def sendtag():

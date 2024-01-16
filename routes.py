@@ -81,7 +81,7 @@ def tag():
     tag_listing = result.fetchall()
     sql = text("SELECT cafes.id, cafes.name, cafes.description \
                FROM tags, tagmap, cafes \
-               WHERE tagmap.tag_id = tags.id AND tags.id = {tag_id} AND \
+               WHERE tagmap.tag_id = tags.id AND tags.id = :tag_id AND \
                tagmap.cafe_id = cafes.id AND \
                tags.visible = TRUE AND \
                cafes.visible = TRUE")

@@ -14,6 +14,7 @@ app = "beansorter"
   internal_port = 8080
   force_https = true
   min_machines_running = 0
+  processes = ['app']
   [http_service.concurrency]
     type = "requests"
     soft_limit = 200
